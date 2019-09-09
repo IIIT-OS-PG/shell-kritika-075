@@ -20,6 +20,7 @@ int change_dir(char **args);
 int help_1(char **args);
 int exit_1(char **args);
 int pipe_count = 0;
+int ENV=0;
 int flag = 0;
 int re = 0;
 int pos=0;
@@ -47,12 +48,12 @@ void initialize()
     fclose(fd);
 }
 //ENVIRONMENT VARIABLE
-int envi(char *l)
+/*int envi(char *l)
 {
     FILE *fp;
     fp = fopen("bash1.txt", "r");
     int ch;
-    char s[1024];
+    char *s=(char*)malloc(sizeof(char));
     if (strcmp(l, "$PATH") == 0)
         ch = 1;
     else if (strcmp(l, "$USER") == 0)
@@ -73,7 +74,7 @@ int envi(char *l)
     }
     fclose(fp);
     return 1;
-}
+}*/
 
 int change_dir(char **args)
 {
@@ -180,8 +181,7 @@ char **separate_line(char *l)
     split[++pos] = NULL;
     /*if(split[1][0]=='$')
 	{
-	envi(split[1]);
-	flag=1;
+	ENV=1;
 	}*/
     return split;
 }
@@ -191,8 +191,6 @@ int exe_pipe(char **arr)
     int fd[2];
     int pid;
     int c = 0;
-	if(re==1)
-	{
     while (*arr != NULL)
     {
         pipe(fd);
@@ -349,6 +347,8 @@ int main(int argc, char **argv)
         add_history(l);
         if (strcmp(l, "history") == 0)
             disp_history();
+		//if(ENV==1)
+		//sta=envi(l);
         if (pipe_count != 0)
         {
             split = piping(l);
